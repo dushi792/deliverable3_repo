@@ -11,83 +11,65 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 /**
  * As a new user,
- * I would like to sign up	 in the web site,
- * So that I can use some function 
- * @author jun
+ * I would like to sign up successfully in the web site,
+ * So that I can then sign in with my user name and password
+ * 
  *
  */
 
 public class SignUpTest {
-	private StringBuffer verificationErrors = new StringBuffer();
 	private WebDriver driver;
+	private StringBuffer verificationErrors = new StringBuffer();
 
 	// Start at the sign up page for stackoverflow for each test
 	@Before
 	public void setUp() throws Exception {
 		driver = new FirefoxDriver();
-		driver.get("https://stackoverflow.com/users/signup");
+		driver.get("https://sso.dealmoon.com/register?language=en");
 	}
 
 	@Test
-	public void testSignUpWithBadPassword() throws Exception {		
-		try {			
-			driver.findElement(By.id("display-name")).sendKeys("juz21");
-			driver.findElement(By.name("email")).sendKeys("juz21@pitt.edu");
-			driver.findElement(By.name("password")).sendKeys("1234567");
-			driver.findElement(By.name("password2")).sendKeys("1234567");
-			//driver.findElement(By.id("submit-button")).click();
-			
-			// Check that there is a link to reset password and it is visible
-			//WebElement submitButton = driver.findElement(By.id("submit-button"));
-			//submitButton.click();
-			
-			WebElement e = driver.findElement(By.xpath("//span/p"));
-			String elementText = e.getText();
-			assertTrue(elementText.contains("Please add one of the following things to make your password stronger"));
-		} catch (NoSuchElementException nseex) {
-			fail();
-		}
-	}
-	
-//	@Test
-//	public void testPasswordNotMatch() throws Exception {
-//		try {
-//			driver.findElement(By.id("display-name")).sendKeys("juz21");
-//			driver.findElement(By.name("email")).sendKeys("juz21@pitt.edu");
-//			driver.findElement(By.name("password")).sendKeys("Dushi792");
-//			driver.findElement(By.name("password2")).sendKeys("Dushi7922");
-//			//driver.findElement(By.id("submit-button")).click();
-//			
-//			// Check that there is a link to reset password and it is visible
-//			//WebElement submitButton = driver.findElement(By.id("submit-button"));
-//			//submitButton.click();
-//			
-//			assertEquals("The passwords do not match.", driver.findElement(By.xpath("//div[8]/div/div")).getText());
-//		} catch (NoSuchElementException nseex) {
-//			fail();
-//		}
-//	}
-	
-	@Test
-	public void testSignUpCorrectly() throws Exception {		
+	public void testSignUpWithBadPassword() throws Exception {
 		try {
-			int radnum = (int)System.currentTimeMillis();
-			driver.findElement(By.id("display-name")).sendKeys("juz"+Integer.toString(radnum));
-			driver.findElement(By.name("email")).sendKeys("juz"+Integer.toString(radnum)+"@pitt.edu");
-			driver.findElement(By.name("password")).sendKeys("Dushi792");
-			driver.findElement(By.name("password2")).sendKeys("Dushi792");
-			
-			// Check that there is a link to reset password and it is visible
-			WebElement submitButton = driver.findElement(By.id("submit-button"));
+			driver.findElement(By.id("regName")).sendKeys("juz123");
+		    driver.findElement(By.id("regMail")).sendKeys("juz123@pitt.edu");
+		    driver.findElement(By.id("hidPassword")).sendKeys("1");
+
+			// Click the "Agree and Sign Up" button to submit form
+			WebElement submitButton = driver.findElement(By.id("reg_btn"));
 			submitButton.click();
 			
-			WebElement e = driver.findElement(By.xpath("//div[@id='mainbar-full']/div[2]/div/p[2]"));
+			WebElement e = driver.findElement(By.id("errorPassword"));
 			String elementText = e.getText();
-			assertTrue(elementText.contains("Open this email to finish signup."));
+			assertTrue(elementText.contains("Password is too short. Password must be between 6 and 32 characters."));
 		} catch (NoSuchElementException nseex) {
 			fail();
 		}
 	}
+	
+	
+	//@Test
+	public void testSignUpCorrectly() throws Exception {		
+		try {
+			// Generate a random number and add it to user name
+			int radnum = (int)System.currentTimeMillis()/100000;
+			driver.findElement(By.id("regName")).sendKeys("juz"+Integer.toString(radnum));
+			driver.findElement(By.id("regMail")).sendKeys("juz"+Integer.toString(radnum)+"@pitt.edu");
+			driver.findElement(By.id("hidPassword")).sendKeys("1234567");
+			driver.findElement(By.id("hidPass")).sendKeys("1234567");
+			
+			// Click the "Agree and Sign Up" button to submit form
+			WebElement submitButton = driver.findElement(By.id("reg_btn"));
+			submitButton.click();
+			// If success it will show a email verification page
+			WebElement e = driver.findElement(By.xpath("//section/div/div[2]/div"));
+			String elementText = e.getText();
+			assertTrue(elementText.contains("Please verify your email!"));
+		} catch (NoSuchElementException nseex) {
+			fail();
+		}
+	}
+	
 	 @After
 	 public void tearDown() throws Exception {
 	    driver.quit();

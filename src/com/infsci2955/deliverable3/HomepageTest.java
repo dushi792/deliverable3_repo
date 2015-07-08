@@ -40,12 +40,12 @@ public class HomepageTest {
 			fail();
 		}
 	}
+	
 	// Given that I am on the homepage
 	// When I click "Coupons"
 	// Then I jump to coupon page
 	// But I still in the dealmoon web site
 	// And I can see the dealmoon logo
-	
 	@Test
 	public void testShowsCorrectTitle2() {		
 		// Jump to coupons
