@@ -37,7 +37,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 		// Given that I am on the main page
 		// When I view the navigation bar
 		// Then I see that it contains the SNS logo like "wechat", "facebook" "google" and "weibo".
-		//@Test
+		@Test
 		public void testFollowUsBar() {
 			// Simply check that the navigation bar contains different follow us links.
 			try{
@@ -53,7 +53,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 		// Given that I am on the main page
 		// When I click facebook link
 		// Then the browser opens a new tab page of dealmoon on the Facebook
-		//@Test
+		@Test
 		public void testFacebookLink() {
 			// Get current window handle
 			String old = driver.getWindowHandle();

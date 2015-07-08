@@ -8,6 +8,8 @@ import org.junit.Test;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * As a new user,
@@ -19,7 +21,6 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 public class SignUpTest {
 	private WebDriver driver;
-	private StringBuffer verificationErrors = new StringBuffer();
 
 	// Start at the sign up page for stackoverflow for each test
 	@Before
@@ -28,9 +29,10 @@ public class SignUpTest {
 		driver.get("https://sso.dealmoon.com/register?language=en");
 	}
 
-	@Test
+	//@Test
 	public void testSignUpWithBadPassword() throws Exception {
 		try {
+			// Input register information
 			driver.findElement(By.id("regName")).sendKeys("juz123");
 		    driver.findElement(By.id("regMail")).sendKeys("juz123@pitt.edu");
 		    driver.findElement(By.id("hidPassword")).sendKeys("1");
@@ -39,6 +41,7 @@ public class SignUpTest {
 			WebElement submitButton = driver.findElement(By.id("reg_btn"));
 			submitButton.click();
 			
+			// Since the password is less than 6 characters, it will get an error message
 			WebElement e = driver.findElement(By.id("errorPassword"));
 			String elementText = e.getText();
 			assertTrue(elementText.contains("Password is too short. Password must be between 6 and 32 characters."));
@@ -48,21 +51,27 @@ public class SignUpTest {
 	}
 	
 	
-	//@Test
+	@Test
 	public void testSignUpCorrectly() throws Exception {		
 		try {
 			// Generate a random number and add it to user name
 			int radnum = (int)System.currentTimeMillis()/100000;
-			driver.findElement(By.id("regName")).sendKeys("juz"+Integer.toString(radnum));
-			driver.findElement(By.id("regMail")).sendKeys("juz"+Integer.toString(radnum)+"@pitt.edu");
+			// Input register information
+			driver.findElement(By.id("regName")).sendKeys("abcd"+Integer.toString(radnum));
+			driver.findElement(By.id("regMail")).sendKeys("abcd"+Integer.toString(radnum)+"@pitt.edu");
 			driver.findElement(By.id("hidPassword")).sendKeys("1234567");
 			driver.findElement(By.id("hidPass")).sendKeys("1234567");
 			
 			// Click the "Agree and Sign Up" button to submit form
 			WebElement submitButton = driver.findElement(By.id("reg_btn"));
 			submitButton.click();
-			// If success it will show a email verification page
-			WebElement e = driver.findElement(By.xpath("//section/div/div[2]/div"));
+			
+			// Need to wait for page change to login
+		    WebElement element = (new WebDriverWait(driver, 30))
+		    		  .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.reg_ps")));
+
+		    // If success it will show a email verification page
+			WebElement e = driver.findElement(By.cssSelector("div.reg_ps"));
 			String elementText = e.getText();
 			assertTrue(elementText.contains("Please verify your email!"));
 		} catch (NoSuchElementException nseex) {
@@ -73,10 +82,6 @@ public class SignUpTest {
 	 @After
 	 public void tearDown() throws Exception {
 	    driver.quit();
-	    String verificationErrorString = verificationErrors.toString();
-	    if (!"".equals(verificationErrorString)) {
-	      fail(verificationErrorString);
-	    }
 	 }
 
 }

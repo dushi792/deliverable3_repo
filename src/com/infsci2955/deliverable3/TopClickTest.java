@@ -20,7 +20,7 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 	public class TopClickTest {
 		static WebDriver driver = new HtmlUnitDriver();
 		
-		// Start at the  page for dealmoon top clicks for each test
+		// Start at the main page of dealmoon for each test
 		@Before
 		public void setUp() throws Exception {
 			driver.get("http://www.dealmoon.com/");
@@ -34,6 +34,7 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 		public void testTimeBar() {
 			// Simply click the Top Clicks tag on the main page
 			driver.findElement(By.linkText("Top Clicks")).click();
+			
 			// Simply check that the tabs bar contains different hours link
 			try{
 				driver.findElement(By.linkText("2 Hour"));
@@ -63,13 +64,14 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 		}
 		
 		// Given that I am on the main page
-		// When I jump to a deal page
+		// When I jump to a category list page
 		// Then I can see the top click box at right
 		@Test
 		public void testTopClickBox() {
 			// Jump to Computers->iPad & Tablets category
 			driver.findElement(By.linkText("Computers")).click();
 			driver.findElement(By.linkText("iPad & Tablets")).click();
+			
 			// At right should have a box titled "Most Clicked Deals in Category"
 			try {
 				WebElement e = driver.findElement(By.cssSelector("h3"));

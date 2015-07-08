@@ -50,6 +50,8 @@ public class HomepageTest {
 	public void testShowsCorrectTitle2() {		
 		// Jump to coupons
 		driver.findElement(By.linkText("Coupons")).click();
+		
+		// Check if in this page has dealmoon logo and text
 		try {
 			WebElement e = driver.findElement(By.className("logo"));
 			String elementText = e.getText();
